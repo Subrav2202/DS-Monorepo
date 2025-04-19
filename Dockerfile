@@ -14,11 +14,12 @@
         echo "//localhost:8081/repository/Ds-Monorepo/:always-auth=true" >> .npmrc
     
     # Copy the entire monorepo setup
-    COPY package.json .
-    COPY yarn.lock .
-    COPY .yarnrc.yml .  # If you have one
+    COPY package.json ./
+    COPY yarn.lock ./
+    COPY .yarnrc.yml ./
     COPY .yarn ./.yarn
     COPY packages ./packages
+
     
     # Install all workspace dependencies
     RUN yarn install --frozen-lockfile --verbose
