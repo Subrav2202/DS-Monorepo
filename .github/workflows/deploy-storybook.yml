@@ -24,7 +24,7 @@ jobs:
 
       - name: Set up .npmrc for Nexus Basic Auth
         run: |
-          echo "registry=//2409:4090:2043:1c16:c457:863d:80c9:57a2/repository/Ds-Monorepo/" > ~/.npmrc
+          echo "registry=http://2409:4090:2043:1c16:c457:863d:80c9:57a2/repository/Ds-Monorepo/" > ~/.npmrc
           echo "//2409:4090:2043:1c16:c457:863d:80c9:57a2/repository/Ds-Monorepo/:username=admin" >> ~/.npmrc
           echo "//2409:4090:2043:1c16:c457:863d:80c9:57a2/repository/Ds-Monorepo/:_password=${{ secrets.NEXUS_PASSWORD_BASE64 }}" >> ~/.npmrc
           echo "//2409:4090:2043:1c16:c457:863d:80c9:57a2/repository/Ds-Monorepo/:email=subravjadhav@gmail.com" >> ~/.npmrc
@@ -40,7 +40,7 @@ jobs:
         run: |
           yarn install --frozen-lockfile
           yarn build
-          npm publish --registry=//2409:4090:2043:1c16:c457:863d:80c9:57a2/repository/Ds-Monorepo/
+          npm publish --registry=http://2409:4090:2043:1c16:c457:863d:80c9:57a2/repository/Ds-Monorepo/
 
       - name: Build and Push Storybook Docker Image
         uses: docker/build-push-action@v5
