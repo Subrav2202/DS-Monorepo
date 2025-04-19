@@ -1,48 +1,55 @@
-# --- Build Stage ---
-    FROM node:18.18.0-alpine AS build
+name: Deploy Storybook
 
-    ARG NEXUS_USER
-    ARG NEXUS_PASSWORD_BASE64
-    
-    WORKDIR /app
+on:
+  push:
+    branches: ["master"]
 
-    # Enable Corepack and install correct Yarn version
-    RUN corepack enable && corepack prepare yarn@4.1.1 --activate
-    
-    # Setup .npmrc manually during build
-    RUN echo "registry=https://3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/" > .npmrc && \
-        echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:username=${NEXUS_USER}" >> .npmrc && \
-        echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:_password=${NEXUS_PASSWORD_BASE64}" >> .npmrc && \
-        echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:email=subravjadhav@gmail.com" >> .npmrc && \
-        echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:always-auth=true" >> .npmrc
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
 
-    
-    # Copy the entire monorepo setup
-    COPY package.json ./
-    COPY yarn.lock ./
-    COPY .yarnrc.yml ./
-    COPY .yarn ./.yarn
-    COPY packages ./packages
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-    # Optional: override PnP linker (if needed)
-    ENV YARN_NODE_LINKER=node-modules
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-    
-    # Install all workspace dependencies
-    RUN yarn install --immutable --verbose
-    
-    WORKDIR /app/packages/core
-    RUN yarn build-storybook
-    
-    # --- Release Stage ---
-    FROM node:18.18.0-alpine AS release
-    WORKDIR /app
-    
-    RUN yarn global add http-server
-    
-    COPY --from=build /app/packages/core/storybook-static ./storybook-static
-    
-    EXPOSE 5001
-    
-    CMD ["http-server", "storybook-static", "-p", "5001"]
-    
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up .npmrc for Nexus and fallback
+        run: |
+          echo "registry=https://registry.npmjs.org/" > ~/.npmrc
+          echo "@my:registry=https://3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/" >> ~/.npmrc
+          echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:username=admin" >> ~/.npmrc
+          echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:_password=${{ secrets.NEXUS_PASSWORD_BASE64 }}" >> ~/.npmrc
+          echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:email=subravjadhav@gmail.com" >> ~/.npmrc
+          echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:always-auth=true" >> ~/.npmrc
+
+      - name: Enable Corepack and install Yarn 4
+        run: |
+          corepack enable
+          corepack prepare yarn@4.1.1 --activate
+
+      - name: Build and Publish @my/core to Nexus
+        working-directory: packages/core
+        run: |
+          yarn install --frozen-lockfile
+          yarn build
+          npm publish --registry=https://3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/
+
+      - name: Build and Push Storybook Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: . 
+          file: ./Dockerfile 
+          push: true
+          tags: ghcr.io/subrav2202/ds-monorepo:latest
+          build-args: |
+            NEXUS_USER=admin
+            NEXUS_PASSWORD_BASE64=${{ secrets.NEXUS_PASSWORD_BASE64 }}
