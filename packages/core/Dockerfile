@@ -13,7 +13,7 @@
         echo "//localhost:8081/repository/Ds-Monorepo/:email=subravjadhav@gmail.com" >> .npmrc && \
         echo "//localhost:8081/repository/Ds-Monorepo/:always-auth=true" >> .npmrc
     
-    COPY package.json yarn.lock ./
+    COPY package.json ./
     RUN yarn install --frozen-lockfile
     
     COPY . .
