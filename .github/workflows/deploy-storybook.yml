@@ -45,7 +45,8 @@ jobs:
       - name: Build and Push Storybook Docker Image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./packages/core
+          file: ./packages/core/Dockerfile 
           push: true
           tags: ghcr.io/subrav2202/ds-monorepo:latest
           build-args: |
