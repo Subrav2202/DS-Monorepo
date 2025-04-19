@@ -10,11 +10,12 @@
     RUN corepack enable && corepack prepare yarn@4.1.1 --activate
     
     # Setup .npmrc manually during build
-    RUN echo "registry=http://localhost:8081/repository/Ds-Monorepo/" > .npmrc && \
-        echo "//localhost:8081/repository/Ds-Monorepo/:username=${NEXUS_USER}" >> .npmrc && \
-        echo "//localhost:8081/repository/Ds-Monorepo/:_password=${NEXUS_PASSWORD_BASE64}" >> .npmrc && \
-        echo "//localhost:8081/repository/Ds-Monorepo/:email=subravjadhav@gmail.com" >> .npmrc && \
-        echo "//localhost:8081/repository/Ds-Monorepo/:always-auth=true" >> .npmrc
+    RUN echo "registry=https://3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/" > .npmrc && \
+        echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:username=${NEXUS_USER}" >> .npmrc && \
+        echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:_password=${NEXUS_PASSWORD_BASE64}" >> .npmrc && \
+        echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:email=subravjadhav@gmail.com" >> .npmrc && \
+        echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:always-auth=true" >> .npmrc
+
     
     # Copy the entire monorepo setup
     COPY package.json ./
@@ -28,7 +29,7 @@
 
     
     # Install all workspace dependencies
-    RUN yarn install --frozen-lockfile --verbose
+    RUN yarn install --immutable --verbose
     
     WORKDIR /app/packages/core
     RUN yarn build-storybook
