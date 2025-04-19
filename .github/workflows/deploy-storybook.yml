@@ -24,11 +24,11 @@ jobs:
 
       - name: Set up .npmrc for Nexus Basic Auth
         run: |
-          echo "registry=http://your-nexus-host:8081/repository/Ds-Monorepo/" > ~/.npmrc
-          echo "//your-nexus-host:8081/repository/Ds-Monorepo/:username=admin" >> ~/.npmrc
-          echo "//your-nexus-host:8081/repository/Ds-Monorepo/:_password=${{ secrets.NEXUS_PASSWORD_BASE64 }}" >> ~/.npmrc
-          echo "//your-nexus-host:8081/repository/Ds-Monorepo/:email=subravjadhav@gmail.com" >> ~/.npmrc
-          echo "//your-nexus-host:8081/repository/Ds-Monorepo/:always-auth=true" >> ~/.npmrc
+          echo "registry=http://2409:4090:2043:1c16:c457:863d:80c9:57a2/repository/Ds-Monorepo/" > ~/.npmrc
+          echo "//http://2409:4090:2043:1c16:c457:863d:80c9:57a2/repository/Ds-Monorepo/:username=admin" >> ~/.npmrc
+          echo "//http://2409:4090:2043:1c16:c457:863d:80c9:57a2/repository/Ds-Monorepo/:_password=${{ secrets.NEXUS_PASSWORD_BASE64 }}" >> ~/.npmrc
+          echo "//http://2409:4090:2043:1c16:c457:863d:80c9:57a2/repository/Ds-Monorepo/:email=subravjadhav@gmail.com" >> ~/.npmrc
+          echo "//http://2409:4090:2043:1c16:c457:863d:80c9:57a2/repository/Ds-Monorepo/:always-auth=true" >> ~/.npmrc
 
       - name: Enable Corepack and install Yarn 4
         run: |
