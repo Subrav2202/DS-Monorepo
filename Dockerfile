@@ -13,11 +13,13 @@
         echo "//localhost:8081/repository/Ds-Monorepo/:email=subravjadhav@gmail.com" >> .npmrc && \
         echo "//localhost:8081/repository/Ds-Monorepo/:always-auth=true" >> .npmrc
     
-    COPY package.json ./
+    COPY package.json yarn.lock ./
+    COPY packages/core ./packages/core
+    
+    # Install from root
     RUN yarn install --frozen-lockfile
     
-    COPY . .
-    
+    WORKDIR /app/packages/core
     RUN yarn build-storybook
     
     # --- Release Stage ---
@@ -26,7 +28,7 @@
     
     RUN yarn global add http-server
     
-    COPY --from=build /app/storybook-static ./storybook-static
+    COPY --from=build /app/packages/core/storybook-static ./storybook-static
     
     EXPOSE 5001
     
