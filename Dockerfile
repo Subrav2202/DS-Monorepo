@@ -5,6 +5,9 @@
     ARG NEXUS_PASSWORD_BASE64
     
     WORKDIR /app
+
+    # Enable Corepack and install correct Yarn version
+    RUN corepack enable && corepack prepare yarn@4.1.1 --activate
     
     # Setup .npmrc manually during build
     RUN echo "registry=http://localhost:8081/repository/Ds-Monorepo/" > .npmrc && \
@@ -19,6 +22,9 @@
     COPY .yarnrc.yml ./
     COPY .yarn ./.yarn
     COPY packages ./packages
+
+    # Optional: override PnP linker (if needed)
+    ENV YARN_NODE_LINKER=node-modules
 
     
     # Install all workspace dependencies
