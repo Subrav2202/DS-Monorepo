@@ -2,11 +2,10 @@ name: Deploy Storybook
 
 on:
   push:
-    branches:
-      - master
+    branches: ["master"]
 
 jobs:
-  build-and-push:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,11 +22,27 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and Push Docker Image
+      - name: Set up .npmrc for Nexus Basic Auth
+        run: |
+          echo "registry=http://your-nexus-host:8081/repository/Ds-Monorepo/" > ~/.npmrc
+          echo "//your-nexus-host:8081/repository/Ds-Monorepo/:username=admin" >> ~/.npmrc
+          echo "//your-nexus-host:8081/repository/Ds-Monorepo/:_password=${{ secrets.NEXUS_PASSWORD_BASE64 }}" >> ~/.npmrc
+          echo "//your-nexus-host:8081/repository/Ds-Monorepo/:email=subravjadhav@gmail.com" >> ~/.npmrc
+          echo "//your-nexus-host:8081/repository/Ds-Monorepo/:always-auth=true" >> ~/.npmrc
+
+      - name: Build and Publish @my/core to Nexus
+        working-directory: packages/core
+        run: |
+          yarn install --frozen-lockfile
+          yarn build
+          npm publish --registry=http://your-nexus-host:8081/repository/Ds-Monorepo/
+
+      - name: Build and Push Storybook Docker Image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository }}:latest
+          tags: ghcr.io/subrav2202/ds-monorepo:latest
           build-args: |
-            NEXUS_TOKEN=${{ secrets.NEXUS_TOKEN }}
+            NEXUS_USER=admin
+            NEXUS_PASSWORD_BASE64=${{ secrets.NEXUS_PASSWORD_BASE64 }}

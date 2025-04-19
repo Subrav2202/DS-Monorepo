@@ -4,6 +4,9 @@
   "main": "lib/index.js",
   "module": "lib/index.js",
   "typings": "lib/index.d.ts",
+  "publishConfig": {
+    "registry": "http://localhost:8081/repository/Ds-Monorepo/"
+  },
   "directories": {
     "lib": "lib"
   },
@@ -12,6 +15,7 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "prepublishOnly": "yarn build",
     "storybook:dev": "storybook dev -p 5001",
     "build-storybook": "storybook build"
   },
