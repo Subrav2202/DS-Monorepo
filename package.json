@@ -1,0 +1,21 @@
+{
+  "name": "my-monorepo",
+  "packageManager": "yarn@4.1.1",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "storybook:core": "yarn workspace @my/core storybook:dev"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "lerna": "^8.2.2",
+    "nx": "20.8.0"
+  }
+}

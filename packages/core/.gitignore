@@ -1,0 +1,6 @@
+lib
+node_modules
+coverage/*
+!coverage/*.svg
+.idea
+yarn.lock

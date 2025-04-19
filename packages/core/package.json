@@ -1,0 +1,39 @@
+{
+  "name": "@my/core",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "storybook:dev": "storybook dev -p 5001",
+    "build-storybook": "storybook build"
+  },
+  "peerDependencies": {
+    "next": "*",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "^8.6.12",
+    "@storybook/addon-designs": "^8.2.1",
+    "@storybook/addon-essentials": "^8.6.12",
+    "@storybook/addon-interactions": "^8.6.12",
+    "@storybook/addon-knobs": "^8.0.1",
+    "@storybook/addon-links": "^8.6.12",
+    "@storybook/addon-styling-webpack": "^1.0.1",
+    "@storybook/addon-viewport": "^8.6.12",
+    "@storybook/nextjs": "^8.6.12",
+    "@storybook/react": "^8.6.12",
+    "next": "^15.3.1",
+    "remark-gfm": "^4.0.1",
+    "storybook": "^8.6.12",
+    "typescript": "^5.0.0"
+  }
+}
