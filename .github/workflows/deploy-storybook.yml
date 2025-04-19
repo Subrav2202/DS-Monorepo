@@ -30,6 +30,11 @@ jobs:
           echo "//your-nexus-host:8081/repository/Ds-Monorepo/:email=subravjadhav@gmail.com" >> ~/.npmrc
           echo "//your-nexus-host:8081/repository/Ds-Monorepo/:always-auth=true" >> ~/.npmrc
 
+      - name: Enable Corepack and install Yarn 4
+        run: |
+          corepack enable
+          corepack prepare yarn@4.1.1 --activate
+
       - name: Build and Publish @my/core to Nexus
         working-directory: packages/core
         run: |
