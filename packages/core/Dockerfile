@@ -6,6 +6,9 @@
     
     WORKDIR /app
     
+    # Install yarn (in case it's not installed)
+    RUN corepack enable && corepack prepare yarn@latest --activate
+    
     # Setup .npmrc with Nexus credentials
     RUN echo "registry=https://3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/" > .npmrc && \
         echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:username=${NEXUS_USER}" >> .npmrc && \
@@ -15,6 +18,10 @@
     
     # Download and install the .tgz package from Nexus
     RUN yarn add https://3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/@my/core/-/core-1.0.0.tgz
+    
+    # Install dependencies for Storybook (if they are not already in the .tgz)
+    WORKDIR /app
+    RUN yarn install --frozen-lockfile --verbose
     
     # Change working dir to the installed package location
     WORKDIR /app/node_modules/@my/core
@@ -27,12 +34,14 @@
     
     WORKDIR /app
     
+    # Install http-server to serve Storybook
     RUN yarn global add http-server
     
-    # Copy built Storybook
+    # Copy built Storybook from build stage
     COPY --from=build /app/node_modules/@my/core/storybook-static ./storybook-static
     
     EXPOSE 5001
     
+    # Serve Storybook
     CMD ["http-server", "storybook-static", "-p", "5001"]
     
