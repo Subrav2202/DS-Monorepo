@@ -7,14 +7,14 @@
     WORKDIR /app
     
     # Setup .npmrc with Nexus credentials
-    RUN echo "registry=https://your-nexus-url/repository/Ds-Monorepo/" > .npmrc && \
-        echo "//your-nexus-url/repository/Ds-Monorepo/:username=${NEXUS_USER}" >> .npmrc && \
-        echo "//your-nexus-url/repository/Ds-Monorepo/:_password=${NEXUS_PASSWORD_BASE64}" >> .npmrc && \
-        echo "//your-nexus-url/repository/Ds-Monorepo/:email=dummy@email.com" >> .npmrc && \
-        echo "//your-nexus-url/repository/Ds-Monorepo/:always-auth=true" >> .npmrc
+    RUN echo "registry=https://3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/" > .npmrc && \
+        echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:username=${NEXUS_USER}" >> .npmrc && \
+        echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:_password=${NEXUS_PASSWORD_BASE64}" >> .npmrc && \
+        echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:email=dummy@email.com" >> .npmrc && \
+        echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:always-auth=true" >> .npmrc
     
     # Download and install the .tgz package from Nexus
-    RUN yarn add https://your-nexus-url/repository/Ds-Monorepo/@my/core/-/core-1.0.0.tgz
+    RUN yarn add https://3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/@my/core/-/core-1.0.0.tgz
     
     # Change working dir to the installed package location
     WORKDIR /app/node_modules/@my/core
