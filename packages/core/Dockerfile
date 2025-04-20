@@ -23,8 +23,7 @@
     # Download and install the .tgz package from Nexus
     RUN yarn add https://3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/@my/core/-/core-1.0.0.tgz
     
-    # Install dependencies for Storybook (if they are not already in the .tgz)
-    WORKDIR /app
+    # Install dependencies for Storybook (including Storybook-related packages)
     RUN yarn install --frozen-lockfile --verbose
     
     # Change working dir to the installed package location
