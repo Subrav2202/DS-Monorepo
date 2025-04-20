@@ -18,7 +18,7 @@
       "sourceMap": true /* Generates corresponding '.map' file. */,
       "declarationDir": "lib",
       // "outFile": "./",                       /* Concatenate and emit output to single file. */
-      // "outDir": "./lib" /* Redirect output structure to the directory. */,
+      "outDir": "./lib" /* Redirect output structure to the directory. */,
       // "composite": true,                     /* Enable project compilation */
       // "tsBuildInfoFile": "./",               /* Specify file to store incremental compilation information */
       // "removeComments": true,                /* Do not emit comments to output. */
