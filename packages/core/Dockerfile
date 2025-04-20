@@ -15,7 +15,7 @@
         echo "//your-nexus-url/repository/Ds-Monorepo/:always-auth=true" >> .npmrc
     
     # Download and install the .tgz package from Nexus
-    RUN yarn add https://your-nexus-url/repository/Ds-Monorepo/@my/core/-/core-${PACKAGE_VERSION}.tgz
+    RUN yarn add https://your-nexus-url/repository/Ds-Monorepo/@my%2fcore/-/core-${PACKAGE_VERSION}.tgz
     
     # Change working dir to the installed package location
     WORKDIR /app/node_modules/@my/core
