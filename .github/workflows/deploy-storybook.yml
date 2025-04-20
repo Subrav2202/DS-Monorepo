@@ -42,14 +42,14 @@ jobs:
           yarn build
           npm publish --registry=https://3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/
 
-      # - name: Build and Push Storybook Docker Image
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: ./packages/core 
-      #     file: ./packages/core/Dockerfile 
-      #     push: true
-      #     tags: ghcr.io/subrav2202/ds-monorepo:latest
-      #     build-args: |
-      #       NEXUS_USER=admin
-      #       NEXUS_PASSWORD_BASE64=${{ secrets.NEXUS_PASSWORD_BASE64 }}
+      - name: Build and Push Storybook Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./packages/core 
+          file: ./packages/core/Dockerfile 
+          push: true
+          tags: ghcr.io/subrav2202/ds-monorepo:latest
+          build-args: |
+            NEXUS_USER=admin
+            NEXUS_PASSWORD_BASE64=${{ secrets.NEXUS_PASSWORD_BASE64 }}
 
