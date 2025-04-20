@@ -6,8 +6,12 @@
     
     WORKDIR /app
     
-    # Install yarn (in case it's not installed)
-    RUN corepack enable && corepack prepare yarn@latest --activate
+    # Install yarn globally using apk (Alpine package manager)
+    RUN apk add --no-cache bash curl && \
+        curl -o- -L https://yarnpkg.com/install.sh | bash
+    
+    # Ensure yarn is installed correctly
+    RUN yarn --version
     
     # Setup .npmrc with Nexus credentials
     RUN echo "registry=https://3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/" > .npmrc && \
