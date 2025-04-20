@@ -3,37 +3,35 @@
 
     ARG NEXUS_USER
     ARG NEXUS_PASSWORD_BASE64
+    ARG PACKAGE_VERSION=1.0.0
     
     WORKDIR /app
     
-    # Setup .npmrc manually during build
-    RUN echo "registry=https://3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/" > .npmrc && \
-    echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:username=${NEXUS_USER}" >> .npmrc && \
-    echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:_password=${NEXUS_PASSWORD_BASE64}" >> .npmrc && \
-    echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:email=subravjadhav@gmail.com" >> .npmrc && \
-    echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:always-auth=true" >> .npmrc
-
+    # Setup .npmrc with Nexus credentials
+    RUN echo "registry=https://your-nexus-url/repository/Ds-Monorepo/" > .npmrc && \
+        echo "//your-nexus-url/repository/Ds-Monorepo/:username=${NEXUS_USER}" >> .npmrc && \
+        echo "//your-nexus-url/repository/Ds-Monorepo/:_password=${NEXUS_PASSWORD_BASE64}" >> .npmrc && \
+        echo "//your-nexus-url/repository/Ds-Monorepo/:email=dummy@email.com" >> .npmrc && \
+        echo "//your-nexus-url/repository/Ds-Monorepo/:always-auth=true" >> .npmrc
     
-    # Copy the entire monorepo setup
-    COPY package.json ./
-    COPY yarn.lock ./
-    COPY .yarnrc.yml ./
-    COPY .yarn ./.yarn
-    COPY packages ./packages
+    # Download and install the .tgz package from Nexus
+    RUN yarn add https://your-nexus-url/repository/Ds-Monorepo/@my/core/-/core-${PACKAGE_VERSION}.tgz
     
-    # Install all workspace dependencies
-    RUN yarn install --frozen-lockfile --verbose
+    # Change working dir to the installed package location
+    WORKDIR /app/node_modules/@my/core
     
-    WORKDIR /app/packages/core
+    # Build Storybook
     RUN yarn build-storybook
     
     # --- Release Stage ---
     FROM node:18.18.0-alpine AS release
+    
     WORKDIR /app
     
     RUN yarn global add http-server
     
-    COPY --from=build /app/packages/core/storybook-static ./storybook-static
+    # Copy built Storybook
+    COPY --from=build /app/node_modules/@my/core/storybook-static ./storybook-static
     
     EXPOSE 5001
     
