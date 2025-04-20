@@ -3,7 +3,6 @@
 
     ARG NEXUS_USER
     ARG NEXUS_PASSWORD_BASE64
-    ARG PACKAGE_VERSION=1.0.0
     
     WORKDIR /app
     
@@ -15,7 +14,7 @@
         echo "//your-nexus-url/repository/Ds-Monorepo/:always-auth=true" >> .npmrc
     
     # Download and install the .tgz package from Nexus
-    RUN yarn add https://your-nexus-url/repository/Ds-Monorepo/@my%2fcore/-/core-${PACKAGE_VERSION}.tgz
+    RUN yarn add https://your-nexus-url/repository/Ds-Monorepo/@my/core/-/core-1.0.0.tgz
     
     # Change working dir to the installed package location
     WORKDIR /app/node_modules/@my/core
