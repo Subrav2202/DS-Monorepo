@@ -22,8 +22,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Enable Corepack and install Yarn 4.9.1
+      - name: Clear Yarn Cache and Install Yarn 4.9.1
         run: |
+          rm -rf ~/.yarn/releases
           corepack enable
           corepack prepare yarn@4.9.1 --activate
 
