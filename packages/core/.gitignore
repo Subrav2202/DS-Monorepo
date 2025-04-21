@@ -4,3 +4,4 @@ coverage/*
 !coverage/*.svg
 .idea
 yarn.lock
+storybook-static/

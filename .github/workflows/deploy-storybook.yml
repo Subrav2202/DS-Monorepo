@@ -24,8 +24,8 @@ jobs:
 
       - name: Enable Corepack and install Yarn 4
         run: |
-           corepack enable
-           corepack prepare yarn@4.1.1 --activate
+          corepack enable
+          corepack prepare yarn@4.1.1 --activate
 
       - name: Set up .npmrc for Nexus Basic Auth
         run: |
@@ -45,11 +45,10 @@ jobs:
       - name: Build and Push Storybook Docker Image
         uses: docker/build-push-action@v5
         with:
-          context: ./packages/core 
-          file: ./packages/core/Dockerfile 
+          context: ./packages/core
+          file: ./packages/core/Dockerfile
           push: true
           tags: ghcr.io/subrav2202/ds-monorepo:latest
           build-args: |
             NEXUS_USER=admin
             NEXUS_PASSWORD_BASE64=${{ secrets.NEXUS_PASSWORD_BASE64 }}
-

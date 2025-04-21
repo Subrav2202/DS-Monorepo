@@ -6,30 +6,26 @@
     
     WORKDIR /app
     
-    # Install yarn globally using apk (Alpine package manager)
-    RUN apk add --no-cache bash curl && \
-        curl -o- -L https://yarnpkg.com/install.sh | bash
+    RUN apk add --no-cache bash curl
     
-    # Ensure yarn is installed correctly
-    RUN yarn --version
+    # Install Yarn 4
+    RUN corepack enable && corepack prepare yarn@4.1.1 --activate
     
-    # Setup .npmrc with Nexus credentials
+    # Configure .npmrc for Nexus
     RUN echo "registry=https://3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/" > .npmrc && \
         echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:username=${NEXUS_USER}" >> .npmrc && \
         echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:_password=${NEXUS_PASSWORD_BASE64}" >> .npmrc && \
         echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:email=dummy@email.com" >> .npmrc && \
         echo "//3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/:always-auth=true" >> .npmrc
     
-    # Download and install the .tgz package from Nexus
+    # Add core package directly from Nexus
     RUN yarn add https://3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/@my/core/-/core-1.0.0.tgz
     
-    # Install dependencies for Storybook (including Storybook-related packages)
-    RUN yarn install --frozen-lockfile --verbose
+    # Install dependencies for @my/core (inside node_modules)
+    RUN yarn install --frozen-lockfile
     
-    # Change working dir to the installed package location
+    # Change to the package directory to build Storybook
     WORKDIR /app/node_modules/@my/core
-    
-    # Build Storybook
     RUN yarn build-storybook
     
     # --- Release Stage ---
@@ -37,7 +33,7 @@
     
     WORKDIR /app
     
-    # Install http-server to serve Storybook
+    # Install http-server globally
     RUN yarn global add http-server
     
     # Copy built Storybook from build stage
@@ -45,6 +41,5 @@
     
     EXPOSE 5001
     
-    # Serve Storybook
     CMD ["http-server", "storybook-static", "-p", "5001"]
     

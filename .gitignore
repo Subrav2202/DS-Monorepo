@@ -84,3 +84,6 @@ yarn-error.log
 # don't forget this one
 !.gitignore
 tsconfig.tsbuildinfo
+
+# stroy 
+storybook-static/

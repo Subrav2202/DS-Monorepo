@@ -15,9 +15,9 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "prepublishOnly": "yarn build",
     "storybook:dev": "storybook dev -p 5001",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "start:storybook": "npx http-server storybook-static -p 5001"
   },
   "dependencies": {
     "rollup-plugin-swc3": "^0.12.1"
