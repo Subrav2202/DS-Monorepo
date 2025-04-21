@@ -1,6 +1,6 @@
 {
   "name": "@my/core",
-  "version": "1.0.34",
+  "version": "1.0.35",
   "main": "lib/index.js",
   "module": "lib/index.js",
   "typings": "lib/index.d.ts",

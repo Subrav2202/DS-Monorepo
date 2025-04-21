@@ -24,7 +24,8 @@
 
     
     # Add core package directly from Nexus
-    RUN yarn add https://3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/@my/core/-/core-1.0.0.tgz
+    RUN yarn add https://admin:admin1234@3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/@my/core/-/core-1.0.0.tgz
+
     
     # Install dependencies for @my/core (inside node_modules)
     RUN yarn install --frozen-lockfile
