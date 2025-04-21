@@ -22,16 +22,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Enable Corepack and install Yarn 4
-        run: |
-          corepack enable
-          corepack prepare yarn@4.9.1 --activate
-
-      - name: Download Yarn 4.9.1 release file
-        run: |
-          mkdir -p .yarn/releases
-          curl -o .yarn/releases/yarn-4.9.1.cjs https://repo.yarnpkg.com/4.9.1/yarn-4.9.1.cjs
-
       - name: Set up .npmrc for Nexus Basic Auth
         run: |
           echo "registry=https://3447-2409-4090-2043-1c16-c457-863d-80c9-57a2.ngrok-free.app/repository/Ds-Monorepo/" > ~/.npmrc
