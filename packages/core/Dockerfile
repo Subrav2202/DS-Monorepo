@@ -24,7 +24,7 @@
     RUN yarn install --frozen-lockfile
     
     # Build Storybook
-    WORKDIR /app/node_modules/@my/core
+    WORKDIR /app/packages/core
     RUN yarn build-storybook
     
     # --- Release Stage ---
